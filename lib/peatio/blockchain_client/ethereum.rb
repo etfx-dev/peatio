@@ -23,14 +23,14 @@ module BlockchainClient
     end
 
     def load_balance!(address, currency)
-      if currency.code.eth?
+      if currency.is_erc20?
+        load_balance_of_address(address, currency)
+      else
         json_rpc(:eth_getBalance, [normalize_address(address), 'latest'])
           .fetch('result')
           .hex
           .to_d
           .yield_self { |amount| convert_from_base_unit(amount, currency) }
-      else
-        load_balance_of_address(address, currency)
       end
     end
 
@@ -158,7 +158,7 @@ module BlockchainClient
     def build_eth_transaction(tx, current_block_json, _address, currency)
       { id:            normalize_txid(tx.fetch('hash')),
         block_number:  current_block_json.fetch('number').hex,
-        entries:       currency.code.eth? ? build_entries(tx, currency) : [] }
+        entries:       currency.is_erc20? ? [] : build_entries(tx, currency) }
     end
 
     def build_entries(tx, currency)

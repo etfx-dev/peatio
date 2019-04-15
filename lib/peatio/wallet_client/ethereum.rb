@@ -79,14 +79,14 @@ module WalletClient
     end
 
     def load_balance!(address, currency)
-      if currency.code.eth?
-        json_rpc(:eth_getBalance, [normalize_address(address), 'latest'])
-          .fetch('result')
-          .hex
-          .to_d
-          .yield_self { |amount| convert_from_base_unit(amount) }
-      else
+      if currency.is_erc20?
         load_balance_of_address(address, currency)
+      else
+        json_rpc(:eth_getBalance, [normalize_address(address), 'latest'])
+            .fetch('result')
+            .hex
+            .to_d
+            .yield_self { |amount| convert_from_base_unit(amount) }
       end
     end
 

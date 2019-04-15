@@ -1,6 +1,6 @@
 FROM ruby:2.6.2 as base
 
-MAINTAINER lbellet@heliostech.fr
+MAINTAINER etx.network@protonmail.com
 
 # By default image is built using RAILS_ENV=production.
 # You may want to customize it:

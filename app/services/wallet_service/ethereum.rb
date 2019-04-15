@@ -13,18 +13,18 @@ module WalletService
     end
 
     def collect_deposit!(deposit, options = {})
-      if deposit.currency.code.eth?
-        collect_eth_deposit!(deposit, options)
-      else
+      if deposit.currency.is_erc20?
         collect_erc20_deposit!(deposit, options)
+      else
+        collect_eth_deposit!(deposit, options)
       end
     end
 
     def build_withdrawal!(withdraw, options = {})
-      if withdraw.currency.code.eth?
-        build_eth_withdrawal!(withdraw, options)
-      else
+      if withdraw.currency.is_erc20?
         build_erc20_withdrawal!(withdraw, options)
+      else
+        build_eth_withdrawal!(withdraw, options)
       end
     end
 
